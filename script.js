@@ -10,7 +10,9 @@ const guessField = document.querySelector('.guessField');
 
 let guessCount = 1;     // used to keep track of number of guesses
 let resetButton;        // not used yet, but will after game ends
+guessField.focus();     // automatically puts cursor in input field upon page load
 
+// Function to check player's guess and return appropriate messages
 function checkGuess() {
     let userGuess = Number(guessField.value);
     if (guessCount === 1) {
@@ -38,6 +40,40 @@ function checkGuess() {
     }
 
     guessCount++;
-    guessField.Value=' ';
+    guessField.value='';
     guessField.focus();
+}
+
+// Call checkGuess function when user clicks submit button
+guessSubmit.addEventListener('click', checkGuess);
+
+// Define the game over function
+function setGameOver() {
+    guessField.disabled = true;
+    guessSubmit.disabled = true;
+    resetButton = document.createElement('button');
+    resetButton.textContent = 'Start new game';
+    document.body.appendChild(resetButton);
+    resetButton.addEventListener('click', resetGame);
+}
+
+// Define the resetGame function
+function resetGame() {
+    guessCount = 1;
+
+    const resetParas = document.querySelectorAll('.resultParas p');
+    for (let i = 0; i < resetParas.length; i++) {
+        resetParas[i].textContent = '';
+    }
+
+    resetButton.parentNode.removeChild(resetButton);
+
+    guessField.disabled = false;
+    guessSubmit.disabled = false;
+    guessField.value = '';
+    guessField.focus();
+
+    lastResult.style.backgroundColor = 'white';
+
+    randomNumber = Math.floor(Math.random() * 100) + 1;
 }
